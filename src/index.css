@@ -4,21 +4,21 @@ body {
   font-family: sans-serif;
 }
 .row{
-  line-height: 11px
+  line-height: 1px
 }
 
 .viva{
   display: inline-block;
-  width: 20px;
-  height: 20px;
+  width: 10px;
+  height: 10px;
   background-color: #55aaee;
   border: 1px solid white;
 }
 
 .muerta{
   display: inline-block;
-  width: 20px;
-  height: 20px;
+  width: 10px;
+  height: 10px;
   background-color: #ccc;
   border: 1px solid white;
 }
