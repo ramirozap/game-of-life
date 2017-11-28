@@ -1,0 +1,24 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+.row{
+  line-height: 11px
+}
+
+.viva{
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-color: #55aaee;
+  border: 1px solid white;
+}
+
+.muerta{
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-color: #ccc;
+  border: 1px solid white;
+}
