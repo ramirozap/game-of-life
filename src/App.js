@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import './App.css';
+import React, { Component } from 'react'
+import './App.css'
 
 class App extends Component {
   constructor(props){
@@ -7,6 +7,7 @@ class App extends Component {
     this.state = {
       gridSize: 20,
     }
+
     this.nextGeneration = this.nextGeneration.bind(this)
     this.getLivingNeighbors = this.getLivingNeighbors.bind(this)
     this.play = this.play.bind(this)
@@ -16,61 +17,48 @@ class App extends Component {
     this.setGridSize = this.setGridSize.bind(this)
     this.randomize = this.randomize.bind(this)
   }
+
+  isAlive({y,x}){
+    try {
+      if (this.state.board[y][x] === 4) {
+        return 1
+      }
+    } catch(e) {}
+
+    return 0
+  }
+
   getLivingNeighbors(x, y){
     let livingNeighbors = 0
-    let board = this.state.board
-    if (y > 0){
-      if (board[y - 1][x] === 9){
-        livingNeighbors += 1
-      }
-      if (x < board.length - 1){
-        if (board[y - 1][x + 1] === 9){
-          livingNeighbors += 1
-        }
-      }
-      if (x > 0){
-        if (board[y - 1][x - 1] === 9){
-          livingNeighbors += 1
-        }
-      }
-    }
-    if (x > 0) {
-      if (board[y][x - 1] === 9){
-        livingNeighbors += 1
-      }
-    }
-    if (x < board.length - 1){
-      if (board[y][x + 1] === 9){
-        livingNeighbors += 1
-      }
-    }
 
-    if (y < board.length - 1){
-      if (board[y + 1][x] === 9) {
-        livingNeighbors += 1
-      }
-      if (x < board.length - 1) {
-        if (board[y + 1][x + 1] === 9) {
-          livingNeighbors += 1
-        }
-      }
-      if (x > 0) {
-        if (board[y + 1][x - 1] === 9) {
-          livingNeighbors += 1
-        }
-      }
-    }
+    let top = {y: y - 1, x: x}
+    let topRight = {y: y - 1 , x: x + 1}
+    let right = {y: y, x: x + 1}
+    let bottomRight = {y: y + 1, x: x + 1}
+    let bottom = {y: y + 1, x: x}
+    let bottomLeft = {y: y + 1 , x: x - 1}
+    let left = {y: y, x: x - 1}
+    let topLeft = {y: y - 1, x: x - 1}
+
+    livingNeighbors += this.isAlive(top)
+    livingNeighbors += this.isAlive(topRight)
+    livingNeighbors += this.isAlive(right)
+    livingNeighbors += this.isAlive(bottomRight)
+    livingNeighbors += this.isAlive(bottom)
+    livingNeighbors += this.isAlive(bottomLeft)
+    livingNeighbors += this.isAlive(left)
+    livingNeighbors += this.isAlive(topLeft)
+
     return livingNeighbors
   }
   nextGeneration(){
     let result = []
-    let board = this.state.board
     this.state.board.forEach((row, y) => {
       result.push([])
       row.forEach((cell, x) => {
         let livingNeighbors = this.getLivingNeighbors(x, y)
-        if (livingNeighbors === 3 || (livingNeighbors === 2 && cell === 9)){
-          result[y].push(9)
+        if (livingNeighbors === 3 || (livingNeighbors === 2 && cell === 4)){
+          result[y].push(4)
         }else{
           let color = (cell > 0) ? (cell - 1) : 0
           result[y].push(color)
@@ -88,7 +76,7 @@ class App extends Component {
     if(!this.interval){
       this.interval = setInterval(()=>{
         this.nextGeneration()
-      }, 500);
+      }, 100)
     }
     this.setState({
       disabled: true
@@ -103,10 +91,10 @@ class App extends Component {
   }
   swapCell(x, y){
     let board = [...this.state.board]
-    if (board[y][x] < 9){
-      board[y][x] = 9  
+    if (board[y][x] < 4){
+      board[y][x] = 4
     }else{
-      board[y][x] = 0  
+      board[y][x] = 0
     }
     this.setState({
       board: board
@@ -131,7 +119,7 @@ class App extends Component {
     for (var i = 0; i < currentGridSize; i++) {
       newBoard.push([])
       for (var j = 0; j < currentGridSize; j++) {
-        newBoard[i].push(Math.round(Math.random()) * 9)
+        newBoard[i].push(Math.round(Math.random()) * 4)
       }
     }
     this.setState({
@@ -159,7 +147,7 @@ class App extends Component {
       "#58B6DB",
       "#C3D9E1"
     ]
-    return colors[Math.floor(cell/2)]
+    return colors[cell]
   }
   render(){
     return (
@@ -170,8 +158,8 @@ class App extends Component {
               <div key={y} className="row">
                 {
                   row.map((cell, x) => {
-                    return (<div key={x} 
-                      className={"cell"} 
+                    return (<div key={x}
+                      className={"cell"}
                       style={{ backgroundColor: this.getBacgroundColor(cell) }}
                     onClick={() => {this.swapCell(x, y)}}></div>)
                   })
@@ -187,8 +175,8 @@ class App extends Component {
         <button onClick={this.clearGrid}>Clear</button>
         <button onClick={this.randomize}>randomize</button>
       </div>
-    );
+    )
   }
 }
 
-export default App;
+export default App
